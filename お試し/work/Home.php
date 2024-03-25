@@ -20,7 +20,6 @@ $pdo = getPdoInstance();
     <img src="../image/Top.png" class="top">
   </header>
   <main>
-
     <h2>家計簿システム</h2>
     <div>
       <table>
@@ -38,7 +37,6 @@ $pdo = getPdoInstance();
         </tr>
       </table>
     </div>
-    
   </main>
 
 </body>

@@ -30,18 +30,18 @@ function getDatas($pdo) {
 }
 
 function addDATE($pdo) {
-  $data = trim(filter_input(INPUT_POST, 'date'));
+  $date = trim(filter_input(INPUT_POST, 'date'));
   $Aitem = trim(filter_input(INPUT_POST, 'Aitem'));
   $content = trim(filter_input(INPUT_POST, 'content'));
   $incomes = trim(filter_input(INPUT_POST, 'incomes'));
   $expenses = trim(filter_input(INPUT_POST, 'expenses'));
 
-  if($data === ''){
+  if($date === ''){
     return;
   }
 
   $stmt = $pdo->prepare("INSERT INTO kakeibo (date, Aitem, content, incomes, expenses) VALUES (:date, :Aitem, :content, :incomes, :expenses)");
-  $stmt->bindValue('date', $date, PDO::PARAM_DATE);
+  $stmt->bindValue('date', $date, PDO::PARAM_STR);
   $stmt->bindValue('Aitem', $Aitem, PDO::PARAM_STR);
   $stmt->bindValue('content', $content, PDO::PARAM_STR);
   $stmt->bindValue('incomes', $incomes, PDO::PARAM_INT);

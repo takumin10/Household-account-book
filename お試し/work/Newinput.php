@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../app/config.php');
 $pdo = getPdoInstance();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-  addDATE();
+  addDATE($pdo);
 }
 
 ?>
@@ -26,6 +26,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <main>
     <h2>収支入力欄</h2>
+    <form action="" method="post">
       <table>
         <tr>
           <th>日付</th>
@@ -34,16 +35,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
           <th>収入</th>
           <th>支出</th>
         </tr>
-    <form action="" method="post">
         <tr>
           <td><input type="date" name="date" placeholder="日付"></td>
           <td>
             <select name="Aitem" placeholder="勘定科目">
-            <option value="1">資産</option>
-            <option value="2">負債</option>
-            <option value="3">収益</option>
-            <option value="4">費用</option>
-            <option value="5" selected></option>
+            <option value="資産">資産</option>
+            <option value="負債">負債</option>
+            <option value="収益">収益</option>
+            <option value="費用">費用</option>
+            <option value="" selected></option>
           </td>
           <td><input type="text" name="content" placeholder="内容"></td>
           <td><input type="number" name="incomes" placeholder="収益"></td>
