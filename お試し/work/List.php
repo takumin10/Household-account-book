@@ -1,10 +1,33 @@
 <?php
 
+session_start();
+
 require_once(__DIR__ . '/../app/config.php');
+
+createToken();
 
 $pdo = getPdoInstance();
 
 $datas = getDatas($pdo);
+
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+  validateToken();
+
+  $action = filter_input(INPUT_GET, 'action');
+  $id = trim(filter_input(INPUT_POST, 'id'));
+
+  switch($action) {
+    case 'delete':
+      Delete($pdo);
+      break;
+    default:
+      break;
+  }
+  
+  header('Location: http://localhost/お試し/work/List.php');
+  exit;
+}
 
 ?>
 
@@ -36,7 +59,13 @@ $datas = getDatas($pdo);
         <td><?= h($data->content);?></td>
         <td><?= h($data->incomes);?></td>
         <td><?= h($data->expenses);?></td>
+        <form action="?action=delete" method="post">
+          <td><button type="submit" name="id" Value="<?= h($data->id); ?>">削除</button></td>
+          <input type="hidden" name="token" value="<?= h($_SESSION['token']); ?>">
+        </form>
+        <td><button>修正</button></td>
       </tr>
+      </form>
     <?php endforeach; ?>
   </table>
   <button onclick="location.href='Home.php'">戻る</button>

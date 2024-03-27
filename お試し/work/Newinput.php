@@ -1,11 +1,21 @@
 <?php
 
+session_start();
+
 require_once(__DIR__ . '/../app/config.php');
+
+createToken();
 
 $pdo = getPdoInstance();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-  addDATE($pdo);
+
+  validateToken();
+  addDATA($pdo);
+
+  header('Location: http://localhost/お試し/work/Newinput.php');
+  exit;
+  
 }
 
 ?>
@@ -51,6 +61,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         </tr>
       </table>
       <input type="submit" value="送信">
+      <input type="hidden" name="token" value="<?= h($_SESSION['token']); ?>">
     </form>
     <button onclick="location.href='Home.php'">戻る</button>
   </main>

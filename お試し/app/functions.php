@@ -23,20 +23,34 @@ function h($str) {
   return htmlspecialchars($str, ENT_QUOTES, 'utf-8');
 }
 
+function createToken() {
+  if(!isset($_SESSION['token'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
+  }
+}
+
+function validateToken() {
+  if(
+    empty($_SESSION['token']) || 
+    $_SESSION['token'] !== filter_input(INPUT_POST, 'token')) {
+    exit('Invalid post request');
+  }
+}
+
 function getDatas($pdo) {
   $stmt = $pdo->query("SELECT * FROM kakeibo");
   $data = $stmt->fetchAll();
   return $data;
 }
 
-function addDATE($pdo) {
+function addDATA($pdo) {
   $date = trim(filter_input(INPUT_POST, 'date'));
   $Aitem = trim(filter_input(INPUT_POST, 'Aitem'));
   $content = trim(filter_input(INPUT_POST, 'content'));
   $incomes = trim(filter_input(INPUT_POST, 'incomes'));
   $expenses = trim(filter_input(INPUT_POST, 'expenses'));
 
-  if($date === ''){
+  if(empty($date)){
     return;
   }
 
@@ -46,5 +60,17 @@ function addDATE($pdo) {
   $stmt->bindValue('content', $content, PDO::PARAM_STR);
   $stmt->bindValue('incomes', $incomes, PDO::PARAM_INT);
   $stmt->bindValue('expenses', $expenses, PDO::PARAM_INT);
+  $stmt->execute();
+}
+
+function Delete($pdo) {
+  $id = trim(filter_input(INPUT_POST, 'id'));
+
+  if(empty($id)){
+    return;
+  }
+
+  $stmt = $pdo->prepare("DELETE FROM kakeibo WHERE id = :id");
+  $stmt->bindValue('id', $id, PDO::PARAM_INT);
   $stmt->execute();
 }
