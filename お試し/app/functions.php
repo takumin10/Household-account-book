@@ -37,8 +37,8 @@ function validateToken() {
   }
 }
 
-function getDatas($pdo) {
-  $stmt = $pdo->query("SELECT * FROM kakeibo");
+function getDatas($pdo, $ym) {
+  $stmt = $pdo->query("SELECT * FROM kakeibo WHERE date BETWEEN '$ym-01' AND '$ym-31'");
   $data = $stmt->fetchAll();
   return $data;
 }

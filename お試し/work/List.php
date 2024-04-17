@@ -8,17 +8,29 @@ createToken();
 
 $pdo = getPdoInstance();
 
-$datas = getDatas($pdo);
+if(isset($_GET['ym'])){
+  $ym = $_GET['ym'];
+} else {
+  $ym = date('Y-m');
+}
+
+$base_date = strtotime($ym);
+$prev = date('Y-m', strtotime('-1 month', $base_date));
+$next = date('Y-m', strtotime('+1 month', $base_date));
+$List_date = date('Y年n月', $base_date);
+
+
+$datas = getDatas($pdo, $ym);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   validateToken();
 
   $action = filter_input(INPUT_GET, 'action');
-  $id = trim(filter_input(INPUT_POST, 'id'));
 
   switch ($action) {
     case 'delete':
+      $id = trim(filter_input(INPUT_POST, 'id'));
       Delete($pdo);
       break;
     default:
@@ -46,6 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>収支一覧</h1>
     <img src="../image/List.png">
   </header>
+  <a href="?ym=<?php echo $prev; ?>"><<</a>
+  <?php echo $List_date; ?>
+  <a href="?ym=<?php echo $next; ?>">>></a>
+  <a href="?ym=<?php echo date('Y-m'); ?>">今月</a>
   <table>
     <tr>
       <th>日付</th>
